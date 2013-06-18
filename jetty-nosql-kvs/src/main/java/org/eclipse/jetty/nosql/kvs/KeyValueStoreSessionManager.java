@@ -23,7 +23,6 @@ import org.eclipse.jetty.nosql.kvs.session.ISerializableSession;
 import org.eclipse.jetty.nosql.kvs.session.TranscoderException;
 import org.eclipse.jetty.nosql.kvs.session.serializable.SerializableSessionFactory;
 import org.eclipse.jetty.server.SessionIdManager;
-import org.eclipse.jetty.server.session.AbstractSession;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 
@@ -98,6 +97,7 @@ public class KeyValueStoreSessionManager extends NoSqlSessionManager
         // we do not want to invalidate all sessions on servlets restart.
         log.info("stopping...");
         super.doStop();
+        _sessions.clear();
         log.info("stopped.");
     }
 
@@ -271,18 +271,18 @@ public class KeyValueStoreSessionManager extends NoSqlSessionManager
         return null;
     }
 
-    @Override
-    protected void addSession(final AbstractSession session)
-    {
-        // nop
-    }
+    //@Override
+    //protected void addSession(final AbstractSession session)
+    //{
+    //    // nop
+    //}
 
-    @Override
-    public AbstractSession getSession(final String idInCluster)
-    {
-        AbstractSession session;
-        return loadSession(idInCluster);
-    }
+    //@Override
+    //public AbstractSession getSession(final String idInCluster)
+    //{
+    //    AbstractSession session;
+    //    return loadSession(idInCluster);
+    //}
 
     /*------------------------------------------------------------ */
     @Override
@@ -377,11 +377,11 @@ public class KeyValueStoreSessionManager extends NoSqlSessionManager
         }
     }
 
-    @Override
-    protected boolean removeSession(final String idInCluster)
-    {
-        return deleteKey(idInCluster);
-    }
+    //@Override
+    //protected boolean removeSession(final String idInCluster)
+    //{
+    //    return deleteKey(idInCluster);
+    //}
 
     /*------------------------------------------------------------ */
     @Override
@@ -399,6 +399,7 @@ public class KeyValueStoreSessionManager extends NoSqlSessionManager
         // do nothing.
         // invalidated sessions will not save in KeyValueStoreSessionManager.save()
         log.debug("invalidateSession: invalidating " + idInCluster);
+        super.invalidateSession(idInCluster);
     }
 
     protected String mangleKey(final String idInCluster)
